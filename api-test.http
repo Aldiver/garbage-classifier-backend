@@ -1,0 +1,14 @@
+
+
+# GET http://localhost/gcbackend/public/api/rfid/tmgawebe HTTP/1.1
+
+##
+
+# GET http://localhost/gcbackend/public/api/points/tmgawebe HTTP/1.1
+
+##
+
+GET http://localhost/gcbackend/public/api/leaderboard/ptzrpmbc HTTP/1.1
+
+##
+
