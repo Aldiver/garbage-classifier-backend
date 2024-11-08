@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Student;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -111,6 +113,57 @@ class StudentController extends Controller
             return response()->json(['message' => 'Points updated successfully', 'current_points' => $student->current_points], 200);
         } else {
             return response()->json(['message' => 'Student not found'], 404);
+        }
+    }
+
+    public function store(Request $request)
+    {
+        // Validate the incoming request
+        $validator = Validator::make($request->all(), [
+            'rfid' => 'required|string|unique:students,rfid',
+            'alias' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'email' => 'required|email',  // Check email only
+            'password' => 'required|string|min:8',
+        ]);
+
+        // If validation fails, return errors
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()
+            ], 422);
+        }
+
+        // Check if the email and password match an existing User
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return response()->json([
+                'error' => 'Invalid credentials. Could not authenticate user.'
+            ], 401);
+        }
+
+        // If authentication is successful, proceed to create the Student record
+        try {
+            $student = new Student();
+            $student->rfid = $request->rfid;
+            $student->alias = $request->alias;
+            $student->first_name = $request->first_name;
+            $student->last_name = $request->last_name;
+            $student->middle_name = $request->middle_name;
+            $student->email = $request->email;  // Store email for reference
+            $student->save();
+
+            // Return the created student data as a response
+            return response()->json([
+                'message' => 'Student added successfully!',
+                'student' => $student
+            ], 201);
+        } catch (\Exception $e) {
+            // If there's an error, return a response
+            return response()->json([
+                'error' => 'An error occurred while saving the student data. Please try again.'
+            ], 500);
         }
     }
 }
