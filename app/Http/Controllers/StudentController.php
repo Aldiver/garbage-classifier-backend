@@ -125,20 +125,20 @@ class StudentController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
-            'email' => 'required|email',  // Check email only
+            'email' => 'required|email',  // Check email format only
             'password' => 'required|string|min:8',
         ]);
 
         // If validation fails, return errors
         if ($validator->fails()) {
             return response()->json([
-                'error' => $validator->errors()
+                'error' => 'Validation failed',
+                'details' => $validator->errors()
             ], 422);
         }
 
         // Check if the email and password match an existing User
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            print "Cannot Authenticate";
             return response()->json([
                 'error' => 'Invalid credentials. Could not authenticate user.'
             ], 401);
@@ -157,7 +157,6 @@ class StudentController extends Controller
             $student->save();
 
             // Return the created student data as a response
-            print "Successfully added student";
             return response()->json([
                 'message' => 'Student added successfully!',
                 'student' => $student
@@ -165,7 +164,8 @@ class StudentController extends Controller
         } catch (\Exception $e) {
             // If there's an error, return a response
             return response()->json([
-                'error' => 'An error occurred while saving the student data. Please try again.'
+                'error' => 'An error occurred while saving the student data. Please try again.',
+                'details' => $e->getMessage()  // Optional: Include this only if debugging
             ], 500);
         }
     }
