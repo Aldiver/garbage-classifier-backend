@@ -152,6 +152,7 @@ class StudentController extends Controller
             $student->last_name = $request->last_name;
             $student->middle_name = $request->middle_name;
             $student->email = $request->email;  // Store email for reference
+            $student->current_points = 0;
             $student->save();
 
             // Return the created student data as a response
