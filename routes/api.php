@@ -21,4 +21,4 @@ Route::get('/leaderboard/{rfid}', [StudentController::class, 'leaderboard']);
 Route::post('/points/{rfid}', [StudentController::class, 'updatePoints']);
 
 //add student if kineme
-Route::post('/students', [StudentController::class, 'store']);
+Route::post('/students', [StudentController::class, 'saveStudent']);

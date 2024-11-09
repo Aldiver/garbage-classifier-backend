@@ -116,7 +116,7 @@ class StudentController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function saveStudent(Request $request)
     {
         // Validate the incoming request
         $validator = Validator::make($request->all(), [
