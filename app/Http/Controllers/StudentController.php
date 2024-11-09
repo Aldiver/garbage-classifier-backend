@@ -138,6 +138,7 @@ class StudentController extends Controller
 
         // Check if the email and password match an existing User
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            print "Cannot Authenticate";
             return response()->json([
                 'error' => 'Invalid credentials. Could not authenticate user.'
             ], 401);
@@ -150,12 +151,13 @@ class StudentController extends Controller
             $student->alias = $request->alias;
             $student->first_name = $request->first_name;
             $student->last_name = $request->last_name;
-            $student->middle_name = $request->middle_name;
+            $student->middle_name = $request->middle_name ?? "";
             $student->email = $request->email;  // Store email for reference
             $student->current_points = 0;
             $student->save();
 
             // Return the created student data as a response
+            print "Successfully added student";
             return response()->json([
                 'message' => 'Student added successfully!',
                 'student' => $student
