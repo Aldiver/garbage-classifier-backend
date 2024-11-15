@@ -101,18 +101,17 @@ class StudentController extends Controller
 
 
     // Add or subtract points from a student
-    public function updatePoints(Request $request, $rfid)
+    public function updatePoints($rfid)
     {
         $student = Student::where('rfid', $rfid)->first();
 
         if ($student) {
-            $points = $request->input('points');
-            $student->current_points += $points;
+            $student->current_points += 10;
             $student->save();
 
             return response()->json(['message' => 'Points updated successfully', 'current_points' => $student->current_points], 200);
         } else {
-            return response()->json(['message' => 'Student not found'], 404);
+            return response()->json(['message' => 'Student not found'], 402);
         }
     }
 

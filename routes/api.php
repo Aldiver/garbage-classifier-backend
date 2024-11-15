@@ -18,7 +18,7 @@ Route::get('/points/{rfid}', [StudentController::class, 'checkPoints']);
 Route::get('/leaderboard/{rfid}', [StudentController::class, 'leaderboard']);
 
 // Add or subtract points from a user
-Route::post('/points/{rfid}', [StudentController::class, 'updatePoints']);
+Route::get('/update-points/{rfid}', [StudentController::class, 'updatePoints']);
 
 //add student if kineme
 Route::post('/students', [StudentController::class, 'saveStudent']);
